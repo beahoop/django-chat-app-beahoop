@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 
-const endpoint = '/api/v1/chatapp/chat/'
+const endpoint = 'https://django-chat-app-beahoop.herokuapp.com/api/v1/chatapp/chat/'
 
 
 class App extends Component {
