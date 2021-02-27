@@ -5,3 +5,60 @@ body {
 .chat-list{
   list-style: none;
 }
+
+.nav-top {
+  background: white;
+  color: black;
+  padding: 25px;
+}
+
+.nav-top ul {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+  display: inline;
+  font-weight: bolder;
+}
+
+.nav-top li{
+  display: inline;
+}
+
+.login{
+  margin-left: 75%;
+  padding-right: 10px;
+}
+
+.top-div{
+  margin-top: 100px;
+
+
+  text-align: center;
+}
+
+.room{
+  background-color: white;
+}
+
+.room-Choice{
+  list-style: none;
+}
+
+.chat-list{
+  list-style: none;
+}
+
+.chadTime{
+  font-size: 2rem;
+  font-weight: bolder;
+}
+
+.tagline {
+  font-size: 1rem;
+  font-weight: lighter;
+}
+.loginform {
+  font-size: 1px;
+  padding: 1px;
+  display: inline;
+}

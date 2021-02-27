@@ -1,20 +1,35 @@
 import React, { Component } from 'react';
+import Cookies from 'js-cookie';
+import Register from './Component/Register';
+// import ChatList from './Component/ChatList';
+import Room from './Component/Room';
+import ChatForm from './Component/ChatForm';
+import Login from './Component/Login';
 import './App.css';
 
-const endpoint = 'https://django-chat-app-beahoop.herokuapp.com/api/v1/chatapp/chat/'
-
+const endpoint = '/api/v1/chatapp/chat/'
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       chats: [],
+      isLoggedIn: !!Cookies.get('Authorization'),
+      clickLogin: false,
+      clickRegister: false,
+
     }
+    // this.filterRoom = this.filterRoom.bind(this);
     this.addChats = this.addChats.bind(this);
     this.editChat = this.editChat.bind(this);
-    this.removeChat =
-    this.removeChat.bind(this);
+    this.removeChat = this.removeChat.bind(this);
+    this.handleRegistration = this.handleRegistration.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogOut = this.handleLogOut.bind(this);
+    this.clickLogin = this.clickLogin.bind(this);
+    this.clickRegister = this.clickRegister.bind(this);
   }
+
     componentDidMount() {
         fetch(`${endpoint}`)
           .then(res => res.json())
@@ -34,20 +49,23 @@ class App extends Component {
       }
 addChats(chat){
   const chats = [...this.state.chats]
+  console.log("YES CHAT", chat)
   chats.push(chat);
   this.setState({ chats })
   }
-editChat(orgCaption, updatedText, id){
+
+editChat(orgChat, updatedText, id){
   const chats = [...this.state.chats]
-  const index = chats.indexOf(orgCaption);
+  const index = chats.indexOf(orgChat);
   chats[index].text = updatedText;
   this.setState({ chats })
-  const text = orgCaption.text
+  const text = orgChat.text
   console.log("CHATS", {text}, "ID", id);
   fetch(`${endpoint}update/${id}/`, {
         method: 'PUT',
         headers: {
-          'Content-Type':'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken' : Cookies.get('csrftoken'),
         },
         body: JSON.stringify({text: text}),
       })
@@ -57,164 +75,191 @@ editChat(orgCaption, updatedText, id){
         }
         return response.json()
         })
-      .then(data => console.log('Success. Message created!'))
+      .then(data => console.log('Success. ChatApp created!'))
       .catch(error => console.log('Error:', error))
       .finally('I am always going to fire!');
   };
+
+
 
 removeChat(chat){
   const chats = [...this.state.chats];
   const index = chats.indexOf(chat);
   chats.splice(index, 1);
   this.setState({ chats });
-  fetch(`${endpoint}remove/${chat.id}`, {
+  fetch(`${endpoint}remove/${chat.id}`, {//type these out line by line some need more than others
         method: 'DELETE',
         headers: {
-          'Content-Type':'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken' : Cookies.get('csrftoken'),
         },
-        body: JSON.stringify(chats),
       })
         .then(response => {
         if(!response.ok){
           throw new Error ('Bad Post request');
         }
-        return response.json()
         })
-      .then(data => console.log('Success. Message created!'))
       .catch(error => console.log('Error:', error))
       .finally('I am always going to fire!');
   };
 
+  async handleRegistration(e, obj){
+  e.preventDefault();
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken' : Cookies.get('csrftoken'),
+    },
+    body: JSON.stringify(obj),
+  };
+  const handleError = (err) => console.warn(err);
+  const response = await fetch('/rest-auth/registration/', options);
+  const data = await response.json().catch(handleError);
+  console.log(data);
+
+  if(data.key){
+    Cookies.set('Authorization', `Token ${data.key}`);
+    this.setState({isLoggedIn: true})
+  }
+
+}
+async handleLogin(e, obj){
+e.preventDefault();
+
+const options = {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-CSRFToken' : Cookies.get('csrftoken'),
+  },
+  body: JSON.stringify(obj),
+};
+const handleError = (err) => console.warn(err);
+const response = await fetch('/rest-auth/login/', options);
+const data = await response.json().catch(handleError);
+console.log(data);
+
+if(data.key){
+  Cookies.set('Authorization', `Token ${data.key}`);
+  this.setState({isLoggedIn: true})
+
+}
+}
+
+async handleLogOut(e){
+e.preventDefault();
+
+alert('logging out');
+
+const options = {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-CSRFToken' : Cookies.get('csrftoken'),
+  },
+};
+const handleError = (err) => console.warn(err);
+const response = await fetch('/rest-auth/logout/', options);
+const data = await response.json().catch(handleError);
+console.log(data);
+
+
+  Cookies.remove('Authorization');
+  this.setState({isLoggedIn: false})
+}
+
+clickLogin(){
+  const login = this.state.clickLogin;
+  if(login === false)
+  this.setState({clickLogin: true})
+  else if(login === true)
+  this.setState({clickLogin: false})
+}
+
+clickRegister(){
+  const register = this.state.clickRegister;
+  if(register === false)
+  this.setState({clickRegister: true})
+  else if(register === true)
+  this.setState({clickRegister: false})
+
+}
+
   render(){
+      //here is where I need to
     return(
       <React.Fragment>
-      <ChatForm addChats={this.addChats}/>
-    <ChatList chats={this.state.chats} editChat={this.editChat}  removeChat={this.removeChat}/>
+      <div className="App">
+        <nav className="nav-top">
+          <ul>
+            <li> ChadTime </li>
+
+            <li className="login" onClick={this.clickLogin}>
+              {this.state.isLoggedIn === true
+                ?
+                "LogOut"
+                :
+                "Login"
+              }</li>
+            <li className="Register" onClick={this.clickRegister}>
+                  {this.state.isLoggedIn === false
+                    ?
+                    "Register"
+                    :
+                    null
+                  }</li>
+          </ul>
+        </nav>
+        <div className="top-div">
+
+                        {this.state.clickLogin === true
+                          ?
+                          <Login className="loginform"
+                              isLoggedIn={this.state.isLoggedIn}
+                              handleLogin={this.handleLogin}
+                              handleLogOut={this.handleLogOut}/>
+                          :
+                          null
+                        }
+                        {this.state.clickRegister === true
+                          ?
+                          <Register handleRegistration={this.handleRegistration} />
+                          :
+                          null
+                        }
+          <p className="chadTime"> Welcome to ChadTime</p>
+          <p className="tagline"> A play on chat time but yanno for Chad</p>
+        </div>
+
+
+      </div>
+
+    { this.state.isLoggedIn === true
+      ?
+      <div>
+
+      <Room className="room" chats={this.state.chats}
+        roomChoices={this.state.roomChoices}
+      roomSelection={this.state.roomSelection}
+      addChats={this.addChats}
+        editChat={this.editChat}
+        removeChat={this.removeChat}
+        />
+
+    </div>
+    :
+    null
+    }
+
       </React.Fragment>
     );
   }
 }
 
-class ChatForm extends Component {
-  constructor(props){
-  super(props);
-  this.state = {
-    text: '',
-    user: '',
-  }
-  this.handleInput = this.handleInput.bind(this);
-  this.handleSubmit = this.handleSubmit.bind(this);
-}
-handleInput(event){
-  this.setState({ [event.target.name]: event.target.value });
-}
 
-  handleSubmit(event){
-    event.preventDefault();
-    const chat = {
-      text: this.state.text
-    }
-    console.log('chat', chat)
-    //fetch post
-      fetch(`${endpoint}create/`, {
-            method: 'POST',
-            headers: {
-              'Content-Type':'application/json',
-            },
-            body: JSON.stringify(chat),
-          })
-            .then(response => {
-            if(!response.ok){
-              throw new Error ('Bad Post request');
-            }
-            return response.json()
-            })
-          .then(data => console.log('Success. Message created!'))
-          .catch(error => console.log('Error:', error))
-          .finally('I am always going to fire!');
-      };
-  render(){
-    return (
-      <>
-      <div className="intro">
-      <p className="introP">Welcome to Chat app
-      </p>
-      <p className="rules"> Please add your username and a message! Once both are added, smash that add button. :)
-      </p>
-       </div>
-      <div className="form-div">
-        <form className="form"onSubmit={this.handleSubmit}><br/>
-          <input type="text" id="chat-user" name="user" value={this.state.user} onChange={this.handleInput} placeholder="Username" required />
-          <label htmlFor="chat-user"></label>
 
-          <input type="text" id="chat-text" name="text" value={this.state.text} onChange={this.handleInput} placeholder="Message" required/>
-          <label htmlFor="chat-text"></label>
-
-          <button type="submit">Add Chat</button>
-        </form>
-     </div>
-     </>
-    )
-  }
-}
-class ChatItem extends Component{
-  constructor(props) {
-    super(props);
-    this.state = {
-      isEditing: false,
-      text: this.props.chat.text,
-    }
-    this.handleInputEdit = this.handleInputEdit.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
-  }
-  handleEdit(event){
-    if(event.keyCode === 13) {
-      this.props.editChat(this.props.chat, this.state.text, this.props.chat.id);
-      this.setState({ isEditing: false })
-    }
-  }
-
-  handleInputEdit(event) {
-  this.setState({ [event.target.name]: event.target.value })
-  }
-
-  render() {
-  const chat = this.props.chat;
-    return(
-      <li className = "chat-item" >
-      <div className="chat-div">
-      {this.state.isEditing
-        ?
-        <input type="text" name="text"
-        value={this.state.text} onChange={this.handleInputEdit}
-        onKeyUp={this.handleEdit}/>
-        :
-        <p className = "chat-list-text" > {chat.text} </p>
-      }
-      {
-        !this.state.isEditing
-        ?
-        <button type="button" onClick={() => this.setState({ isEditing: !this.state.isEditing   })}>Edit</button>
-        :
-        null
-      }
-      <button type="button" onClick={()=> this.props.removeChat(chat)}>Delete</button>
-      </div>
-       </li>
-    )
-  }
-}
-
-function ChatList(props) {
-  const chats = props.chats.map((chat, index) => (
-    <ChatItem key={index} chat={chat} editChat={props.editChat} removeChat={props.removeChat}/>
-  ));
-  console.log(props.chats);
-  return(
-    <ul className="chat-list"> { chats }
-    </ul>
-  )
-}
 
 export default App;
 

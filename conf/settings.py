@@ -37,10 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     #3rd parties
+     'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'rest_auth',
+    'rest_auth.registration',
     'rest_framework',
+    'rest_framework.authtoken',
 
     #local
     'api.apps.ApiConfig',
@@ -133,7 +140,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -143,3 +149,23 @@ REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend/static')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+#https://django-rest-auth.readthedocs.io/en/latest/installation.html#registration-optional
+SITE_ID = 1
+
+#Sending email
+#https://docs.djangoproject.com/en/3.1/topics/email/
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+#https://www.django-rest-framework.org/
+#https://www.django-rest-framework.org/
+REST_FRAMEWORK = {
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions',
+    #     #.IsAuthenticated',
+    # ],
+    'DEFAULT_AUTHENICATION_CLASSES' : [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
