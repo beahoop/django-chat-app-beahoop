@@ -29,10 +29,14 @@ body {
   padding-right: 10px;
 }
 
+.logout{
+  margin-left: 75%;
+  padding-right: 10px;
+  display: inline;
+}
+
 .top-div{
-  margin-top: 100px;
-
-
+  margin-top: 50px;
   text-align: center;
 }
 
@@ -58,7 +62,68 @@ body {
   font-weight: lighter;
 }
 .loginform {
+  text-align: right;
   font-size: 1px;
-  padding: 1px;
+  background-color: white;
+  padding: 20px;
+  padding-right: 80px;
+}
+
+.regform {
+  text-align: right;
+  font-size: 1px;
+  background-color: white;
+  padding: 20px;
+  padding-right: 80px;
+}
+
+.logout-btn {
+  border: none;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+}
+/* /////////ROOMS */
+
+.roomNav-Choice {
+  background-color: white;
+  text-align: center;
+  width: 20%;
+  padding: 20px;
+  margin: 0px;
+}
+.roomNav-Choice li{
+  padding: 20px;
+}
+.room-button {
+  border: none;
+  color: black;
+  background-color: white;
+  padding: 5px 32px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+}
+.roomAndChatDisplay{
+  display: flex;
+}
+.chatDisplay{
   display: inline;
+  width: 40%;
+}
+/* ///////////chatform */
+
+.chatForm {
+  display: inline;
+  text-align: center;
+}
+
+/* ///////////chatlist */
+
+.chatList{
+  list-style: none;
+  text-align: center;
 }

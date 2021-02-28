@@ -212,23 +212,25 @@ clickRegister(){
                   }</li>
           </ul>
         </nav>
+        {this.state.clickLogin === true
+          ?
+          <Login className="loginform"
+              isLoggedIn={this.state.isLoggedIn}
+              handleLogin={this.handleLogin}
+              handleLogOut={this.handleLogOut}/>
+          :
+          null
+        }
+        {this.state.clickRegister === true
+          ?
+          <Register handleRegistration={this.handleRegistration} />
+          :
+          null
+        }
         <div className="top-div">
 
-                        {this.state.clickLogin === true
-                          ?
-                          <Login className="loginform"
-                              isLoggedIn={this.state.isLoggedIn}
-                              handleLogin={this.handleLogin}
-                              handleLogOut={this.handleLogOut}/>
-                          :
-                          null
-                        }
-                        {this.state.clickRegister === true
-                          ?
-                          <Register handleRegistration={this.handleRegistration} />
-                          :
-                          null
-                        }
+
+
           <p className="chadTime"> Welcome to ChadTime</p>
           <p className="tagline"> A play on chat time but yanno for Chad</p>
         </div>
@@ -238,7 +240,7 @@ clickRegister(){
 
     { this.state.isLoggedIn === true
       ?
-      <div>
+      <div className="roomAndChatDisplay">
 
       <Room className="room" chats={this.state.chats}
         roomChoices={this.state.roomChoices}

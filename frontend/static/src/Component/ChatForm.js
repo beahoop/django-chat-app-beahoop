@@ -52,8 +52,8 @@ handleInput(event){
   render(){
     return (
       <>
-      
-      <div className="form-div">
+
+      <div className="chatForm">
         <form className="form"onSubmit={this.handleSubmit}>
           <input type="text" id="chat-text" name="text" value={this.state.text} onChange={this.handleInput} placeholder="Message" required/>
           <label htmlFor="chat-text"></label><br/>
