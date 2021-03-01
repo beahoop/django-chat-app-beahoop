@@ -27,25 +27,26 @@ class ChatItem extends Component{
     return(
       <li className = "chat-item" >
       <div className="chat-div">
-      <p>Said by {chat.owner?.username}</p>
+      <p>{chat.owner?.username}:</p>
       {//because everyone chat didn't have an owner
       }
+      {
+        !this.state.isEditing
+        ?
+        <button type="button" onClick={() => this.setState({ isEditing: !this.state.isEditing   })}><i className="fas fa-edit"></i></button>
+        :
+        null
+      }
+      <button type="button" onClick={()=> this.props.removeChat(chat)}><i className="fas fa-trash-alt"></i></button>
+
       {this.state.isEditing
         ?
         <input type="text" name="text"
         value={this.state.text} onChange={this.handleInputEdit}
         onKeyUp={this.handleEdit}/>
         :
-        <p className = "chat-list-text" > {chat.text} </p>
+        <span className = "chat-list-text" > {chat.text} </span>
       }
-      {
-        !this.state.isEditing
-        ?
-        <button type="button" onClick={() => this.setState({ isEditing: !this.state.isEditing   })}>Edit</button>
-        :
-        null
-      }
-      <button type="button" onClick={()=> this.props.removeChat(chat)}>Delete</button>
       </div>
        </li>
     )

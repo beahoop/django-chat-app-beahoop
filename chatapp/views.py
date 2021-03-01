@@ -24,11 +24,11 @@ class ChatAppCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-    def form_valid(self, form):
-        form.instance.owner = self.request.user
-        form.instance.room_id = self.kwargs['pk']
-        #keyword agr 
-        return super().form_valid(form)
+    # def form_valid(self, form):
+    #     form.instance.owner = self.request.user
+    #     form.instance.room_id = self.kwargs['pk']
+    #     #keyword agr
+    #     return super().form_valid(form)
     #owner is property on the model, setting owner on the user that is logged in
     #this links the logged in user will be added as the owner to the chat
     #when it gets created
@@ -41,6 +41,7 @@ class ChatAppDestroyView(generics.DestroyAPIView):
 class ChatAppUpdateView(generics.UpdateAPIView):
     permission_classes = (permissions.IsAdminUser | IsOwnerOrReadOnly,)
     queryset = ChatApp.objects.all()
+    # queryset = ChatApp.objects.exclude(ChatApp.room)
     serializer_class = ChatAppSerializer
 
 class RoomView(generics.ListCreateAPIView):

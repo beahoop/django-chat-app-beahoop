@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import Register from './Component/Register';
 // import ChatList from './Component/ChatList';
 import Room from './Component/Room';
-import ChatForm from './Component/ChatForm';
+
 import Login from './Component/Login';
 import './App.css';
 
@@ -55,7 +55,10 @@ addChats(chat){
   }
 
 editChat(orgChat, updatedText, id){
-  const chats = [...this.state.chats]
+  const chats = {
+    chats: [...this.state.chats]
+    // room: "this.state.room"
+  }
   const index = chats.indexOf(orgChat);
   chats[index].text = updatedText;
   this.setState({ chats })
