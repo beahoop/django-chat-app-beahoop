@@ -6,14 +6,14 @@ import ChatItem from './ChatItem';
 // </li>
 
 function ChatList(props) {
-  const filterChatsByRoom = props.chats.filter(chats => {
-      if(chats.room === props.roomSelection){
-        console.log("matchChatsWithRooms", chats.room)
-        return chats
+  const filterChatsByRoom = props.chats.filter(chat => {
+      if(chat.room?.id === props.roomSelection){
+        console.log("matchChatsWithRooms", chat.room)
+        return chat
       }
-      return console.log("what is this?", chats.room )
+      return console.log("what is this?", chat.room )
     }).map(( chats , id ) => (
-      <ChatItem key={id} chat={chats} editChat={props.editChat} removeChat={props.removeChat}/>
+      <ChatItem key={id} chat={chats} chats={props.chats} editChat={props.editChat} removeChat={props.removeChat}/>
 
   //
 ));

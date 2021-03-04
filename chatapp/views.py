@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, permissions
 from .permissions import IsOwnerOrReadOnly
 
@@ -23,7 +23,9 @@ class ChatAppCreateView(generics.CreateAPIView):
     serializer_class = ChatAppSerializer
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        # import pdb; pdb.set_trace()
+        room = get_object_or_404(Room, pk=self.request.data['room'])
+        serializer.save(owner=self.request.user, room=room)
     # def form_valid(self, form):
     #     form.instance.owner = self.request.user
     #     form.instance.room_id = self.kwargs['pk']
@@ -43,6 +45,7 @@ class ChatAppUpdateView(generics.UpdateAPIView):
     queryset = ChatApp.objects.all()
     # queryset = ChatApp.objects.exclude(ChatApp.room)
     serializer_class = ChatAppSerializer
+    #a patch request
 
 class RoomView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAdminUser | IsOwnerOrReadOnly,)

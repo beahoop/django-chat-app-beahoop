@@ -13,7 +13,7 @@ class Room extends Component{
     this.state = {
       title: "",
       rooms: [],
-      roomSelection: "Main",
+      roomSelection: 1,
 
     }
     this.filterRoom = this.filterRoom.bind(this);
@@ -81,16 +81,16 @@ class Room extends Component{
 };
 
 filterRoom(event){
-const roomType = event.target.dataset.room;
-this.setState({roomSelection: roomType})
-console.log("RoomType", roomType)
+  // const roomType = event.target.dataset.room;
+  // this.setState({roomSelection: roomType})
+  // console.log("RoomType", roomType)
 }
 
 
   render(){
-    const roomTypes = this.state.rooms.map((roomChoice, id) => (
-        <li key={id} >
-        <button className="room-button" onClick={this.filterRoom} data-room={roomChoice.title}>  {roomChoice.title} </button>
+    const roomTypes = this.state.rooms.map((roomChoice) => (
+        <li key={roomChoice.id} >
+        <button className="room-button" onClick={() => this.setState({roomSelection: roomChoice.id})} >  {roomChoice.title} </button>
         </li>
 ))
 
@@ -112,7 +112,10 @@ console.log("RoomType", roomType)
   roomSelection={this.state.roomSelection}
   rooms={this.state.rooms}
   addChats={this.props.addChats}/>
-<ChatList roomSelection={this.state.roomSelection} chats={this.props.chats} editChat={this.props.editChat} removeChat={this.props.removeChat}/>
+<ChatList roomSelection={this.state.roomSelection}
+  chats={this.props.chats}
+  editChat={this.props.editChat}
+  removeChat={this.props.removeChat}/>
 </div>
       </>
     )

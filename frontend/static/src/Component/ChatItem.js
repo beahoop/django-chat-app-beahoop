@@ -11,6 +11,7 @@ class ChatItem extends Component{
     this.handleEdit = this.handleEdit.bind(this);
   }
   handleEdit(event){
+    console.log("THIS PROPS",this.props);
     if(event.keyCode === 13) {
       this.props.editChat(this.props.chat, this.state.text, this.props.chat.id);
       this.setState({ isEditing: false })

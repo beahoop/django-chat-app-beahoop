@@ -4,7 +4,7 @@ from .models import ChatApp, Room
 class ChatAppSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatApp
-        fields = '__all__' #could write '__all__'
+        fields = ('text', 'owner', 'room', "id") #could write '__all__'
         depth = 1
 
 class RoomSerializer(serializers.ModelSerializer):

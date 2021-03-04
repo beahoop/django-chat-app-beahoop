@@ -9,8 +9,8 @@ class Room(models.Model):
 class ChatApp(models.Model):
     text = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    room = models.CharField(max_length=255)
-    # room = models.ForeignKey(Room, on_delete=models.CASCADE, null=True)
+    # room = models.CharField(max_length=255)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
     #make room a text field and method to filter it by forginkey
 #
     #foreignkey access other attirube from a different table ..

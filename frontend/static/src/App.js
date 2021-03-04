@@ -55,10 +55,9 @@ addChats(chat){
   }
 
 editChat(orgChat, updatedText, id){
-  const chats = {
-    chats: [...this.state.chats]
+  console.log('console log id', orgChat.id);
+  const chats =  [...this.state.chats]
     // room: "this.state.room"
-  }
   const index = chats.indexOf(orgChat);
   chats[index].text = updatedText;
   this.setState({ chats })
@@ -226,7 +225,7 @@ clickRegister(){
         }
         {this.state.clickRegister === true
           ?
-          <Register handleRegistration={this.handleRegistration} />
+          <Register className="register" handleRegistration={this.handleRegistration} />
           :
           null
         }
